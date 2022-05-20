@@ -1,0 +1,73 @@
+﻿<Window x:Class="View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <Window.Resources>
+        <local:StringToDoubleSConverter x:Key="myStringToDoubleSConverter" />
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="mdParam">
+            <TextBlock Text="MeasuredData params" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center"/>
+            <TextBlock>Choose function</TextBlock>
+            <ComboBox x:Name="boxFunc" Text="{Binding Path=sData.md.function, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock>cubic</TextBlock>
+                <TextBlock>Func</TextBlock>
+                <TextBlock>randFunc</TextBlock>
+                <TextBlock>linear</TextBlock>
+            </ComboBox>
+            <TextBlock>Enter the number of breakpoints</TextBlock>
+            <TextBox x:Name="cnt_md" Height="20" Text="{Binding Path=sData.md.cnt_nodes, ValidatesOnDataErrors=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock>Enter the limits</TextBlock>
+            <TextBox x:Name="myTextBox2" Height="20" Text="{Binding Path=sData.md.limits, ValidatesOnDataErrors=True, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource myStringToDoubleSConverter}}"/>
+            <Button Name ="button_calc" Content="Calculate breakpoints" Command="{Binding button_calc_Click}" Height="20" Width="170" Margin="0,10,0,0"/>
+        </StackPanel>
+
+        <StackPanel x:Name="spParam" Grid.Row="1">
+            <TextBlock Text="Splines params" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center"/>
+            <TextBlock>Enter the number of points for render</TextBlock>
+            <TextBox x:Name="myTextBox3" Height="20" Text="{Binding Path=sData.sp.cnt_nodes, ValidatesOnDataErrors=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock>Enter the first spline's derivations</TextBlock>
+            <TextBox x:Name="myTextBox4" Height="20" Text="{Binding Path=sData.sp.derivatives_spline1, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource myStringToDoubleSConverter}}"/>
+            <TextBlock>Enter the second spline's derivations</TextBlock>
+            <TextBox x:Name="myTextBox5" Height="20" Text="{Binding Path=sData.sp.derivatives_spline2, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource myStringToDoubleSConverter}}"/>
+            <Button Name ="button_draw" Content="Calculate derivatives and draw" Command="{Binding button_draw_Click}" Height="20" Width="170" Margin="0,10,0,0"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <TextBlock FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center" Text="MeasuredData"/>
+            <ListBox Name="mdList" ItemsSource="{Binding sData.md.viewXY}" Margin="0,20,0,0"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="2">
+            <StackPanel>
+                <TextBlock Text="Derivatives for first spline" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"/>
+                <ListBox Name="spDeriv1List" Margin="0,0,0,0" ItemsSource="{Binding sData.viewDerivSpline1}"/>
+                <TextBlock Text="Derivatives for second spline" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"/>
+                <ListBox Name="spDeriv2List" Margin="0,0,0,0" ItemsSource="{Binding sData.viewDerivSpline2}"/>
+            </StackPanel>
+        </Grid>
+
+        <!--<WindowsFormsHost Child="{Binding chart}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch"  Margin="2" VerticalAlignment="Stretch" />-->
+        <ContentControl Content="{Binding MyWindowsFormsHost}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch"  Margin="2" VerticalAlignment="Stretch" />
+
+    </Grid>
+</Window>
